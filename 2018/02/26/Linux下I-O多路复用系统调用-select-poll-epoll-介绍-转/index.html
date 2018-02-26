@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="#1 概念引入 I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。 Linux中基于socket的通信本质也是一种I/O，使用socket()函数创建的套接字默认都是阻塞的，这意味着当sockets API的调用不能立即完成时，线程一直处于等待状态，">
+<meta name="description" content="1 概念引入I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。 Linux中基于socket的通信本质也是一种I/O，使用socket()函数创建的套接字默认都是阻塞的，这意味着当sockets API的调用不能立即完成时，线程一直处于等待状态，直到">
 <meta name="keywords" content="Linux网络编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux下I&#x2F;O多路复用系统调用(select, poll, epoll)介绍(转)">
 <meta property="og:url" content="http://yoursite.com/2018/02/26/Linux下I-O多路复用系统调用-select-poll-epoll-介绍-转/index.html">
 <meta property="og:site_name" content="條路自己揀，僕街唔好喊。">
-<meta property="og:description" content="#1 概念引入 I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。 Linux中基于socket的通信本质也是一种I/O，使用socket()函数创建的套接字默认都是阻塞的，这意味着当sockets API的调用不能立即完成时，线程一直处于等待状态，">
+<meta property="og:description" content="1 概念引入I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。 Linux中基于socket的通信本质也是一种I/O，使用socket()函数创建的套接字默认都是阻塞的，这意味着当sockets API的调用不能立即完成时，线程一直处于等待状态，直到">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-26T15:32:36.246Z">
+<meta property="og:updated_time" content="2018-02-26T15:37:34.922Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux下I&#x2F;O多路复用系统调用(select, poll, epoll)介绍(转)">
-<meta name="twitter:description" content="#1 概念引入 I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。 Linux中基于socket的通信本质也是一种I/O，使用socket()函数创建的套接字默认都是阻塞的，这意味着当sockets API的调用不能立即完成时，线程一直处于等待状态，">
+<meta name="twitter:description" content="1 概念引入I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。 Linux中基于socket的通信本质也是一种I/O，使用socket()函数创建的套接字默认都是阻塞的，这意味着当sockets API的调用不能立即完成时，线程一直处于等待状态，直到">
 
 
 
@@ -186,7 +186,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -196,7 +196,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -260,7 +260,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-26T23:31:54+08:00">
                 2018-02-26
@@ -300,8 +300,7 @@
       
 
       
-        <p>#1 概念引入</p>
-<p>I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。</p>
+        <h1 id="1-概念引入"><a href="#1-概念引入" class="headerlink" title="1 概念引入"></a>1 概念引入</h1><p>I/O多路复用（multiplexing）的本质是通过一种机制（系统内核缓冲I/O数据），让单个进程可以监视多个文件描述符，一旦某个描述符就绪（一般是读就绪或写就绪），能够通知程序进行相应的读写操作。</p>
 <p>Linux中基于socket的通信本质也是一种I/O，使用socket()函数创建的套接字默认都是阻塞的，这意味着当sockets API的调用不能立即完成时，线程一直处于等待状态，直到操作完成获得结果或者超时出错。会引起阻塞的socket API分为以下四种：</p>
 <pre><code>输入操作： recv()、recvfrom()。以阻塞套接字为参数调用该函数接收数据时，如果套接字缓冲区内没有数据可读，则调用线程在数据到来前一直睡眠。
 输出操作： send()、sendto()。以阻塞套接字为参数调用该函数发送数据时，如果套接字缓冲区没有可用空间，线程会一直睡眠，直到有空间。
@@ -309,17 +308,14 @@
 外出连接：connect()。对于TCP连接，客户端以阻塞套接字为参数，调用该函数向服务器发起连接。该函数在收到服务器的应答前，不会返回。这意味着TCP连接总会等待至少服务器的一次往返时间。
 </code></pre><p>使用阻塞模式的套接字编写网络程序比较简单，容易实现。但是在服务器端，通常要处理大量的套接字通信请求，如果线程阻塞于上述的某一个输入或输出调用时，将无法处理其他任何运算或响应其他网络请求，这么做无疑是十分低效的，当然可以采用多线程，但大量的线程占用很大的内存空间，并且线程切换会带来很大的开销。而I/O多路复用模型能处理多个connection的优点就<strong>使其能支持更多的并发连接请求</strong>。</p>
 <p>Linux支持I/O多路复用的系统调用有select、poll、epoll，这些调用都是内核级别的。但select、poll、epoll本质上都是同步I/O，先是block住等待就绪的socket，再block住将数据从内核拷贝到用户内存空间。基于select调用的I/O复用模型如下：<br><a href="https://pic2.zhimg.com/80/v2-bae9d6368b741d17e09c791a664a43ba_hd.jpg" target="_blank" rel="noopener">select调用</a></p>
-<p>#2 select, poll, epoll系统调用详解</p>
-<p>select，poll，epoll之间的区别如下图：</p>
+<h1 id="2-select-poll-epoll系统调用详解"><a href="#2-select-poll-epoll系统调用详解" class="headerlink" title="2 select, poll, epoll系统调用详解"></a>2 select, poll, epoll系统调用详解</h1><p>select，poll，epoll之间的区别如下图：</p>
 <p><a href="https://pic1.zhimg.com/80/v2-e6a869884585625dfc7eace1b90c3024_hd.jpg" target="_blank" rel="noopener">区别</a></p>
-<p>##2.1 select详解</p>
-<p>Linux提供的select相关函数接口如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> max_fd, fd_set *readset, fd_set *writeset, fd_set *exceptset, struct timeval *timeout)</span></span></span><br><span class="line"><span class="function"><span class="title">FD_ZERO</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>   <span class="comment">//清空集合</span></span></span><br><span class="line"><span class="function"><span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>    <span class="comment">//将给定的描述符加入集合</span></span></span><br><span class="line"><span class="function"><span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>  <span class="comment">//将给定的描述符从文件中删除  </span></span></span><br><span class="line"><span class="function"><span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>    <span class="comment">//判断指定描述符是否在集合中</span></span></span><br></pre></td></tr></table></figure></p>
+<h2 id="2-1-select详解"><a href="#2-1-select详解" class="headerlink" title="2.1 select详解"></a>2.1 select详解</h2><p>Linux提供的select相关函数接口如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> max_fd, fd_set *readset, fd_set *writeset, fd_set *exceptset, struct timeval *timeout)</span></span></span><br><span class="line"><span class="function"><span class="title">FD_ZERO</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>   <span class="comment">//清空集合</span></span></span><br><span class="line"><span class="function"><span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>    <span class="comment">//将给定的描述符加入集合</span></span></span><br><span class="line"><span class="function"><span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>  <span class="comment">//判断指定描述符是否在集合中  </span></span></span><br><span class="line"><span class="function"><span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd, fd_set* fds)</span>    <span class="comment">//将给定的描述符从文件中删除</span></span></span><br></pre></td></tr></table></figure></p>
 <pre><code>select函数的返回值就绪描述符的数目，超时时返回0，出错返回-1。
 第一个参数max_fd指待测试的fd个数，它的值是待测试的最大文件描述符加1，文件描述符从0开始到max_fd-1都将被测试。
 中间三个参数readset、writeset和exceptset指定要让内核测试读、写和异常条件的fd集合，如果不需要测试的可以设置为NULL。
 </code></pre><p>基于select的I/O复用模型的是单进程执行，占用资源少，可以为多个客户端服务。但是select需要轮询每一个描述符，在高并发时仍然会存在效率问题，同时select能支持的最大连接数通常受限。</p>
-<p>##2.2 poll详解</p>
-<p>poll的机制与select类似，与select在本质上没有多大差别，管理多个描述符也是进行轮询，根据描述符的状态进行处理，但是poll没有最大文件描述符数量的限制。</p>
+<h2 id="2-2-poll详解"><a href="#2-2-poll详解" class="headerlink" title="2.2 poll详解"></a>2.2 poll详解</h2><p>poll的机制与select类似，与select在本质上没有多大差别，管理多个描述符也是进行轮询，根据描述符的状态进行处理，但是poll没有最大文件描述符数量的限制。</p>
 <p>Linux提供的poll函数接口如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd fds[], <span class="keyword">nfds_t</span> nfds, <span class="keyword">int</span> timeout)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></span><br><span class="line">        <span class="keyword">int</span> fd;                         <span class="comment">// 需要被检测或选择的文件描述符</span></span><br><span class="line">        <span class="keyword">short</span> events;                   <span class="comment">// 对文件描述符fd上感兴趣的事件</span></span><br><span class="line">        <span class="keyword">short</span> revents;                  <span class="comment">// 文件描述符fd上当前实际发生的事件*/</span></span><br><span class="line">&#125; <span class="keyword">pollfd_t</span>;</span><br></pre></td></tr></table></figure></p>
 <pre><code>poll()函数返回fds集合中就绪的读、写，或出错的描述符数量，返回0表示超时，返回-1表示出错；
 fds是一个struct pollfd类型的数组，用于存放需要检测其状态的socket描述符，并且调用poll函数之后fds数组不会被清空；
@@ -327,8 +323,7 @@ nfds记录数组fds中描述符的总数量；
 timeout是调用poll函数阻塞的超时时间，单位毫秒；
 一个pollfd结构体表示一个被监视的文件描述符，通过传递fds[]指示 poll() 监视多个文件描述符。其中，结构体的events域是监视该文件描述符的事件掩码，由用户来设置这个域，结构体的revents域是文件描述符的操作结果事件掩码，内核在调用返回时设置这个域。events域中请求的任何事件都可能在revents域中返回。
 </code></pre><p>合法的事件如下：<br>POLLIN 有数据可读<br>POLLRDNORM 有普通数据可读<br>POLLRDBAND 有优先数据可读<br>POLLPRI 有紧迫数据可读<br>POLLOUT 写数据不会导致阻塞<br>POLLWRNORM 写普通数据不会导致阻塞 POLLWRBAND 写优先数据不会导致阻塞 POLLMSGSIGPOLL 消息可用<br>当需要监听多个事件时，使用POLLIN | POLLRDNORM设置 events 域；当poll调用之后检测某事件是否发生时，fds[i].revents &amp; POLLIN进行判断。</p>
-<p>##2.3 epoll详解</p>
-<p>epoll在Linux2.6内核正式提出，是基于事件驱动的I/O方式，相对于select和poll来说，epoll没有描述符个数限制，使用一个文件描述符管理多个描述符，将用户关心的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。优点如下：</p>
+<h2 id="2-3-epoll详解"><a href="#2-3-epoll详解" class="headerlink" title="2.3 epoll详解"></a>2.3 epoll详解</h2><p>epoll在Linux2.6内核正式提出，是基于事件驱动的I/O方式，相对于select和poll来说，epoll没有描述符个数限制，使用一个文件描述符管理多个描述符，将用户关心的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。优点如下：</p>
 <ol>
 <li>没有最大并发连接的限制，能打开的fd上限远大于1024（1G的内存能监听约10万个端口）</li>
 <li>采用回调的方式，效率提升。只有活跃可用的fd才会调用callback函数，也就是说 epoll 只管你“活跃”的连接，而跟连接总数无关，因此在实际的网络环境中，epoll的效率就会远远高于select和poll。</li>
@@ -337,10 +332,9 @@ timeout是调用poll函数阻塞的超时时间，单位毫秒；
 <p>epoll对文件描述符的操作有两种模式：LT(level trigger，水平触发)和ET(edge trigger)。</p>
 <p><strong>水平触发</strong>：默认工作模式，即当epoll_wait检测到某描述符事件就绪并通知应用程序时，应用程序可以不立即处理该事件；下次调用epoll_wait时，会再次通知此事件。</p>
 <p><strong>边缘触发</strong>：当epoll_wait检测到某描述符事件就绪并通知应用程序时，应用程序必须立即处理该事件。如果不处理，下次调用epoll_wait时，不会再次通知此事件。（直到你做了某些操作导致该描述符变成未就绪状态了，也就是说边缘触发只在状态由未就绪变为就绪时通知一次）。<br>ET模式很大程度上减少了epoll事件的触发次数，因此效率比LT模式下高。</p>
-<p>Linux中提供的epoll相关函数接口如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, <span class="keyword">int</span> fd, struct epoll_event *event)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_event * events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</span><br><span class="line"></span><br><span class="line">    epoll_create函数创建一个epoll句柄，参数size表明内核要监听的描述符数量。调用成功时返回一个epoll句柄描述符，失败时返回<span class="number">-1</span>。</span><br><span class="line">    epoll_ctl函数注册要监听的事件类型。四个参数解释如下：</span><br><span class="line">    \circ epfd表示epoll句柄；</span><br><span class="line">    \circ op表示fd操作类型：EPOLL_CTL_ADD（注册新的fd到epfd中），EPOLL_CTL_MOD（修改已注册的fd的监听事件），EPOLL_CTL_DEL（从epfd中删除一个fd）</span><br><span class="line">    \circ fd是要监听的描述符；</span><br><span class="line">    \circ event表示要监听的事件</span><br><span class="line">    epoll_event结构体定义如下：</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> &#123;</span></span><br><span class="line">        <span class="keyword">__uint32_t</span> events;  <span class="comment">/* Epoll events */</span></span><br><span class="line">        <span class="keyword">epoll_data_t</span> data;  <span class="comment">/* User data variable */</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">union</span> epoll_data &#123;</span><br><span class="line">        <span class="keyword">void</span> *ptr;</span><br><span class="line">        <span class="keyword">int</span> fd;</span><br><span class="line">        <span class="keyword">__uint32_t</span> u32;</span><br><span class="line">        <span class="keyword">__uint64_t</span> u64;</span><br><span class="line">    &#125; <span class="keyword">epoll_data_t</span>;</span><br><span class="line"></span><br><span class="line">    epoll_wait函数等待事件的就绪，成功时返回就绪的事件数目，调用失败时返回 <span class="number">-1</span>，等待超时返回 <span class="number">0</span>。</span><br><span class="line">    \circ epfd是epoll句柄</span><br><span class="line">    \circ events表示从内核得到的就绪事件集合</span><br><span class="line">    \circ maxevents告诉内核events的大小</span><br><span class="line">    \circ timeout表示等待的超时事件</span><br></pre></td></tr></table></figure></p>
+<p>Linux中提供的epoll相关函数接口如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, <span class="keyword">int</span> fd, struct epoll_event *event)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_event * events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>    epoll_create函数创建一个epoll句柄，参数size表明内核要监听的描述符数量。调用成功时返回一个epoll句柄描述符，失败时返回<span class="number">-1</span>。</span><br><span class="line"><span class="number">2.</span>    epoll_ctl函数注册要监听的事件类型。四个参数解释如下：</span><br><span class="line">     epfd表示epoll句柄；</span><br><span class="line">     op表示fd操作类型：EPOLL_CTL_ADD（注册新的fd到epfd中），EPOLL_CTL_MOD（修改已注册的fd的监听事件），EPOLL_CTL_DEL（从epfd中删除一个fd）</span><br><span class="line">     fd是要监听的描述符；</span><br><span class="line">     event表示要监听的事件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    epoll_event结构体定义如下：</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> &#123;</span></span><br><span class="line">        <span class="keyword">__uint32_t</span> events;  <span class="comment">/* Epoll events */</span></span><br><span class="line">        <span class="keyword">epoll_data_t</span> data;  <span class="comment">/* User data variable */</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">union</span> epoll_data &#123;</span><br><span class="line">        <span class="keyword">void</span> *ptr;</span><br><span class="line">        <span class="keyword">int</span> fd;</span><br><span class="line">        <span class="keyword">__uint32_t</span> u32;</span><br><span class="line">        <span class="keyword">__uint64_t</span> u64;</span><br><span class="line">    &#125; <span class="keyword">epoll_data_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>   epoll_wait函数等待事件的就绪，成功时返回就绪的事件数目，调用失败时返回 <span class="number">-1</span>，等待超时返回 <span class="number">0</span>。</span><br><span class="line">     epfd是epoll句柄</span><br><span class="line">     events表示从内核得到的就绪事件集合</span><br><span class="line">     maxevents告诉内核events的大小</span><br><span class="line">     timeout表示等待的超时事件</span><br></pre></td></tr></table></figure></p>
 <p>上述三个系统调用的实际实例可参考IO多路复用：select、poll、epoll示例和Linux高性能服务器编程。</p>
-<p>#3 小结</p>
-<p>epoll是Linux目前大规模网络并发程序开发的首选模型。在绝大多数情况下性能远超select和poll。目前流行的高性能web服务器Nginx正式依赖于epoll提供的高效网络套接字轮询服务。但是，在并发连接不高的情况下，多线程+阻塞I/O方式可能性能更好。</p>
+<h1 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h1><p>epoll是Linux目前大规模网络并发程序开发的首选模型。在绝大多数情况下性能远超select和poll。目前流行的高性能web服务器Nginx正式依赖于epoll提供的高效网络套接字轮询服务。但是，在并发连接不高的情况下，多线程+阻塞I/O方式可能性能更好。</p>
 
       
     </div>
@@ -431,8 +425,17 @@ timeout是调用poll函数阻塞的超时时间，单位毫秒；
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -452,7 +455,7 @@ timeout是调用poll函数阻塞的超时时间，单位毫秒；
                 <a href="/archives/">
               
                   <span class="site-state-item-count">7</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -465,7 +468,7 @@ timeout是调用poll函数阻塞的超时时间，单位毫秒；
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -487,6 +490,22 @@ timeout是调用poll函数阻塞的超时时间，单位毫秒；
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-概念引入"><span class="nav-number">1.</span> <span class="nav-text">1 概念引入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-select-poll-epoll系统调用详解"><span class="nav-number">2.</span> <span class="nav-text">2 select, poll, epoll系统调用详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-select详解"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 select详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-poll详解"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 poll详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-epoll详解"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 epoll详解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-小结"><span class="nav-number">3.</span> <span class="nav-text">3 小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -511,7 +530,7 @@ timeout是调用poll函数阻塞的超时时间，单位毫秒；
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
